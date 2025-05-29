@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Submitting Your Confirmation</title>
+</head>
+<body>
+  <h2>Submitting your confirmation...</h2>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const email = params.get('email');
+    const status = params.get('status');
+
+    const flowUrl = "https://prod-84.southeastasia.logic.azure.com:443/workflows/40b78370d754409f8729fb138abe5e4c/triggers/manual/paths/invoke?api-version=2016-06-01";
+
+    fetch(flowUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email: email, status: status })
+    })
+    .then(response => {
+      if (response.ok) {
+        document.body.innerHTML = "<h2>Thank you! Your confirmation was recorded.</h2>";
+      } else {
+        document.body.innerHTML = "<h2>Oops! Something went wrong.</h2>";
+      }
+    })
+    .catch(error => {
+      document.body.innerHTML = "<h2>Network error. Please try again later.</h2>";
+    });
+  </script>
+</body>
+</html>
